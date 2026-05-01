@@ -64,3 +64,17 @@ def test_delete_post(base_url, session, timeout):
 def test_get_invalid_post(base_url, session, timeout):
     response = session.get(f"{base_url}/posts/999999", timeout=timeout)
     assert response.status_code == 404 or response.json() == {}
+
+def test_create_post_invalid_payload(base_url, session, timeout):
+    payload = {
+        "title": "",
+        "body": "",
+        "userId": None
+    }
+
+    response = session.post(f"{base_url}/posts", json=payload, timeout=timeout)
+
+    assert response.status_code in [201, 400]
+
+    data = response.json()
+    assert "id" in data
