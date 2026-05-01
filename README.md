@@ -15,6 +15,8 @@ This project demonstrates automated REST API testing using Python, Pytest, and R
 - pytest-html
 
 ## 📂 Project Structure
+
+```
 Automated-API-Test-Suite/
 │── tests/
 │   ├── test_api.py
@@ -22,6 +24,7 @@ Automated-API-Test-Suite/
 │
 │── requirements.txt
 │── README.md
+```
 
 ## ⚙️ Setup Instructions
 
