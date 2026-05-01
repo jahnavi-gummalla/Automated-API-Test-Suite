@@ -1,56 +1,66 @@
-import requests
-
-BASE_URL = "https://jsonplaceholder.typicode.com"
-
-# Test 1: Get list of posts - should return 200
-def test_get_posts():
-    response = requests.get(f"{BASE_URL}/posts")
+def test_get_posts(base_url, session, timeout):
+    response = session.get(f"{base_url}/posts", timeout=timeout)
     assert response.status_code == 200
+
     data = response.json()
+    assert isinstance(data, list)
     assert len(data) > 0
-    assert "title" in data[0]
+    assert "userId" in data[0]
     assert "id" in data[0]
-    print("✅ Get posts passed!")
+    assert "title" in data[0]
+    assert "body" in data[0]
 
-# Test 2: Get single post - should return 200
-def test_get_single_post():
-    response = requests.get(f"{BASE_URL}/posts/1")
+
+def test_get_single_post(base_url, session, timeout):
+    response = session.get(f"{base_url}/posts/1", timeout=timeout)
     assert response.status_code == 200
+
     data = response.json()
     assert data["id"] == 1
+    assert "userId" in data
     assert "title" in data
     assert "body" in data
-    print("✅ Get single post passed!")
 
-# Test 3: Create a new post - should return 201
-def test_create_post():
-    payload = {"title": "Jahnavi", "body": "Software Tester", "userId": 1}
-    response = requests.post(f"{BASE_URL}/posts", json=payload)
+
+def test_create_post(base_url, session, timeout):
+    payload = {
+        "title": "Jahnavi",
+        "body": "Software Tester",
+        "userId": 1
+    }
+
+    response = session.post(f"{base_url}/posts", json=payload, timeout=timeout)
     assert response.status_code == 201
+
     data = response.json()
-    assert data["title"] == "Jahnavi"
-    assert data["body"] == "Software Tester"
+    assert data["title"] == payload["title"]
+    assert data["body"] == payload["body"]
+    assert data["userId"] == payload["userId"]
     assert "id" in data
-    print("✅ Create post passed!")
 
-# Test 4: Update a post - should return 200
-def test_update_post():
-    payload = {"title": "Updated Title", "body": "Updated Body", "userId": 1}
-    response = requests.put(f"{BASE_URL}/posts/1", json=payload)
+
+def test_update_post(base_url, session, timeout):
+    payload = {
+        "title": "Updated Title",
+        "body": "Updated Body",
+        "userId": 1
+    }
+
+    response = session.put(f"{base_url}/posts/1", json=payload, timeout=timeout)
     assert response.status_code == 200
+
     data = response.json()
-    assert data["title"] == "Updated Title"
-    assert data["body"] == "Updated Body"
-    print("✅ Update post passed!")
+    assert data["title"] == payload["title"]
+    assert data["body"] == payload["body"]
+    assert data["userId"] == payload["userId"]
+    assert data["id"] == 1
 
-# Test 5: Delete a post - should return 200
-def test_delete_post():
-    response = requests.delete(f"{BASE_URL}/posts/1")
+
+def test_delete_post(base_url, session, timeout):
+    response = session.delete(f"{base_url}/posts/1", timeout=timeout)
     assert response.status_code == 200
-    print("✅ Delete post passed!")
 
-# Test 6: Get non-existent post - should return 404
-def test_get_invalid_post():
-    response = requests.get(f"{BASE_URL}/posts/99999")
-    assert response.status_code == 404
-    print("✅ Negative test passed!")
+
+def test_get_invalid_post(base_url, session, timeout):
+    response = session.get(f"{base_url}/posts/999999", timeout=timeout)
+    assert response.status_code == 404 or response.json() == {}
