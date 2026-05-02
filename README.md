@@ -46,7 +46,7 @@ pytest
 pytest --html=reports/report.html
 
 ## 📌 Notes
-- Uses public APIs (JSONPlaceholder / ReqRes)
+- Uses JSONPlaceholder public API (jsonplaceholder.typicode.com)
 - Can be extended with authentication and CI/CD
 
 ## 👩‍💻 Author
